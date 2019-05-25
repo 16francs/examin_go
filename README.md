@@ -20,7 +20,7 @@
 
 * 以下のコマンドを実行
 
-> $ make setup
+> $ make build
 
 ## 起動方法
 
