@@ -1,23 +1,25 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"os"
+
+	"github.com/16francs/examin_go/infrastructure/router"
 )
 
 func main() {
-	// 起動確認用 -> helth check 用ちゃんと作る!!
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "Hello you've requested: %s\n", r.URL.Path)
-	})
-
 	// config, middleware のロード
 
-	// ポートの設定 ( default: 8080 )
+	// ポートの設定 (default: 8080)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
 	// 起動コマンド
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal("ListenAndServer:", err)
+	router := router.Router()
+	if err := http.ListenAndServe(":"+port, router); err != nil {
+		log.Fatalf("alert: %v", err)
 	}
 }

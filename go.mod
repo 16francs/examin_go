@@ -1,6 +1,7 @@
 module github.com/16francs/examin_go
 
 require (
+	github.com/gin-gonic/gin v1.4.0
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
 	golang.org/x/lint v0.0.0-20190409202823-959b441ac422 // indirect
 	golang.org/x/net v0.0.0-20190522155817-f3200d17e092 // indirect
