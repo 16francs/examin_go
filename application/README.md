@@ -1,8 +1,9 @@
 # aplication
 
-ユースケースの記述をする
+ユースケース?ビジネスロジックの記述をする
 handler から受け取った値を service に送る
 service からの結果を handler に返す
+また、エラー情報などはここで追加したりするらしい...
 
 ```
 // UserUsecase - User 用のインターフェース
