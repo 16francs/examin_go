@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: circleci/golang:1.12
         environment:
+          GO111MODULE: on
           DATABASE_USERNAME: root
           DATABASE_PASSWORD: ''
           DATABASE_HOST: 127.0.0.1
@@ -22,11 +23,6 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 120s
-
-      # Install dep
-      - run:
-          name: Install modules
-          command: go mod init
     
       # Install golint
       - run:
@@ -37,11 +33,6 @@ jobs:
       - run:
           name: Install goveralls
           command: go get github.com/mattn/goveralls
-
-      # Build project
-      - run:
-          name: Build project
-          command: go build
 
       # Run lint
       - run:
