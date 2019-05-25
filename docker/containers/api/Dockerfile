@@ -1,15 +1,15 @@
-# マルチビルド
-# 開発環境
-FROM golang:1.12-alpine as build
-
-WORKDIR /go/src/app
+FROM golang:1.12-alpine
 
 ENV GO111MODULE=on
 
-COPY . .
+WORKDIR /go/src/app
 
-RUN apk add --no-cache git
-RUN go build -o app
-# RUN go get github.com/oxequa/realize
+RUN apk add --no-cache \
+        alpine-sdk \
+        git
 
-# 本番環境
+RUN go get github.com/pilu/fresh
+
+EXPOSE 8080
+
+CMD ["fresh"]

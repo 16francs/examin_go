@@ -1,11 +1,7 @@
-# プロジェクトのビルド
-build:
-	go build -o examin_go
-
-# コンテナの作成
+.PHONY: setup
 setup:
 	docker-compose build
 
-# サーバの起動
+.PHONY: run
 run:
 	docker-compose up

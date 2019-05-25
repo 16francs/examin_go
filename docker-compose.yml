@@ -4,16 +4,12 @@ services:
   api:
     build: 
       context: ./docker/containers/api
-      target: build
     volumes:
       - ./:/go/src/app:cached
-    working_dir: /go/src/app
     ports: 
       - 8080:8080
     tty: true
     stdin_open: true
-    # command: realize start --run
-    command: go run ./main.go
 
   db:
     build:
