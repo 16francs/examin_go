@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  api:
+    build: 
+      context: .
+      target: build
+    volumes:
+      - ./:/go/src/app:cached
+    working_dir: /go/src/app
+    ports: 
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    # command: realize start --run
+    command: go run ./main.go

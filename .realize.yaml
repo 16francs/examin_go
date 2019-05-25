@@ -1,0 +1,21 @@
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: examin_go
+  path: .
+  commands:
+    run:
+      status: true
+      method: make build
+    run:
+      status: true
+      method: ./examin_go
+  watcher:
+    extensions:
+    - go
+    ignore:
+      paths:
+      - .git
+      - vendor
