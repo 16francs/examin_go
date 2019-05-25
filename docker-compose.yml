@@ -3,7 +3,7 @@ version: '3.5'
 services:
   api:
     build: 
-      context: .
+      context: ./docker/containers/api
       target: build
     volumes:
       - ./:/go/src/app:cached
@@ -14,3 +14,19 @@ services:
     stdin_open: true
     # command: realize start --run
     command: go run ./main.go
+
+  db:
+    build:
+      context: ./docker/containers/db
+    volumes:
+      - db_data:/var/lib/mysql
+    ports: 
+      - 3316:3306
+    restart: always
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      TZ: "Asia/Tokyo"
+
+volumes:
+  db_data:
+    driver: local
