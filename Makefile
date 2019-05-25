@@ -7,7 +7,7 @@ GOTEST  := $(GOCMD) test
 #　環境構築
 setup:
 	export GO111MODULE=on
-	$(GOGET) github.com/golang/lint/golint
+	$(GOGET) -u golang.org/x/lint/golint
 
 build:
 	$(GOBUILD)
