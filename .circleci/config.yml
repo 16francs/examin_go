@@ -1,0 +1,68 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.12
+        environment:
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: ''
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: 3306
+      - image: circleci/mysql:5.7.24
+        environment:
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: examin_test
+    working_directory: /go/src/github.com/16francs/examin_go
+    steps:
+      - checkout
+
+      # Database setup
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+      # Install dep
+      - run:
+          name: Install modules
+          command: go mod init
+    
+      # Install golint
+      - run:
+          name: Install golint
+          command: go get github.com/golang/lint/golint
+    
+      # Install goveralls
+      - run:
+          name: Install goveralls
+          command: go get github.com/mattn/goveralls
+
+      # Build project
+      - run:
+          name: Build project
+          command: go build
+
+      # Run lint
+      - run:
+          name: Run lint
+          command: golint ./...
+
+      # Run Test
+      - run:
+          name: Run test
+          command: go test -v -cover ./... -coverprofile=./coverage.out
+
+      # Create Test Result HTML
+      - run:
+          name: Create test result
+          command: go tool cover -html=./coverage.out -o ./coverage.html
+
+      # Sore coverage
+      - store_artifacts:
+          path: ./coverage.html
+    
+      # Post coverage
+      - run:
+          name: Post coverage
+          command: goveralls -coverprofile=./coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
