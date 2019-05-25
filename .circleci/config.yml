@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: circleci/golang:1.12
         environment:
-          GO111MODULE: on
+          GO111MODULE: 'on'
           DATABASE_USERNAME: root
           DATABASE_PASSWORD: ''
           DATABASE_HOST: 127.0.0.1
@@ -24,25 +24,32 @@ jobs:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 120s
 
-      # Init modeules
+      - restore_cache:
+          name: Restore go modules cache
+          keys:
+            - mod-{{ .Environment.COMMON_CACHE_KEY }}-{{ checksum "go.mod" }}
+    
+      # Install mod
       - run:
-          name: Install modules
-          command: go mod init
+          name: Vendoring
+          command: go mod download
+
+      # Save cached
+      - save_cache:
+          name: Save go modules cache
+          key: mod-{{ .Environment.COMMON_CACHE_KEY }}-{{ checksum "go.mod" }}
+          paths:
+            - /go/pkg/mod/cache
     
       # Install golint
       - run:
           name: Install golint
-          command: go get github.com/golang/lint/golint
+          command: go get -u golang.org/x/lint/golint
     
       # Install goveralls
       - run:
           name: Install goveralls
           command: go get github.com/mattn/goveralls
-
-      # Build project
-      - run:
-          name: Build project
-          command: go build
 
       # Run lint
       - run:
