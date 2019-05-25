@@ -28,10 +28,6 @@
 
 > $ sudo mysql.server start
 
-* テストの実行
-
-> $ make test
-
 * サーバを起動
 
 > $ make run

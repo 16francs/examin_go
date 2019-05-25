@@ -3,6 +3,8 @@
 DBへアクセスする処理を記述
 何かライブラリを用いる予定 -> たぶん gorm
 
+-> gorm を使う
+
 ```
 type userRepository struct {
 }

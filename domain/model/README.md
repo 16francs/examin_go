@@ -14,3 +14,23 @@ type User struct {
 	Activated bool   `json:"activated"`
 }
 ```
+
+ディレクトリの分け方
+
+```
+model
+├── students
+│   └── user
+└── teachers
+    └── user
+```
+
+e.g.) model/students/user
+
+```
+package model
+
+type User struce {
+	...
+}
+```
