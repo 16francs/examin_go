@@ -1,24 +1,29 @@
 GOCMD   := go
 GOBUILD := $(GOCMD) build
 GOGET   := $(GOCMD) get
-GORUN   := $(GOCMD) run
+GOLINT  := golint
 GOTEST  := $(GOCMD) test
+COMPOSE := docker-compose
 
 #　環境構築
 setup:
 	export GO111MODULE=on
-	$(GOGET) -u golang.org/x/lint/golint
 
-build:
+# 依存ライブラリをビルド
+install:
 	$(GOBUILD)
+
+# コンテナのビルド
+build:
+	$(COMPOSE) build
 
 # サーバの起動
 run:
-	$(GORUN) ./main.go
+	$(COMPOSE) up
 
 # リントの実行
 lint:
-	golint ./...
+	$(GOLINT) ./...
 
 # テストの実行
 test:
