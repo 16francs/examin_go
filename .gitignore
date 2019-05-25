@@ -1,0 +1,22 @@
+# Ignore bundler config.
+/vendor
+
+# Add environment setting.
+/.env
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/coverage
+
+# Ignore idea files
+.idea/
+
+# Mac finder artifacts
+.DS_Store
+
+# Ignore secret key files
+*.rsa
+*.rsa.pub
