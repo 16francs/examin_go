@@ -23,6 +23,11 @@ jobs:
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+      # Init modeules
+      - run:
+          name: Install modules
+          command: go mod init
     
       # Install golint
       - run:
@@ -33,6 +38,11 @@ jobs:
       - run:
           name: Install goveralls
           command: go get github.com/mattn/goveralls
+
+      # Build project
+      - run:
+          name: Build project
+          command: go build
 
       # Run lint
       - run:
