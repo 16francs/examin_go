@@ -5,7 +5,7 @@
 
 [仕様書: API Blueprint](https://github.com/16francs/examin_blueprint)     
 [フロントエンド: Vue.js](https://github.com/16francs/examin_vue)     
-[バックエンド: Golang API](https://github.com/16francs/examin_go)
+[バックエンド: Golang API](https://github.com/16francs/examin_go)  
 [インフラ周り](https://github.com/16francs/examin)
 
 ## 開発環境
