@@ -9,15 +9,18 @@ import (
 )
 
 func main() {
-	// 環境変数のロード
+	// ログ出力設定
+	config.Logger()
+
+	// 環境変数
 	env, err := config.LoadEnv()
 	if err != nil {
-		log.Fatalf("failed to load env: %s", err)
+		log.Fatalf("alert: %s", err)
 	}
 
 	// 起動コマンド
 	router := router.Router()
 	if err := http.ListenAndServe(":"+env.Port, router); err != nil {
-		log.Fatalf("failed to server start: %v", err)
+		log.Fatalf("alert: %v", err)
 	}
 }
