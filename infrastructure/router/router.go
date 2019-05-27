@@ -12,7 +12,7 @@ func Router() *gin.Engine {
 
 	// ルーティング
 	router := gin.Default()
-	router.Use(middleware.RequestLogger())
+	router.Use(middleware.Logger())
 
 	router.GET("/health", registry.HealthHandler.GetHealth)
 
