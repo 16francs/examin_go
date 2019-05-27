@@ -17,7 +17,7 @@ func Logger() gin.HandlerFunc {
 		buf, _ := ioutil.ReadAll(c.Request.Body)
 		rdr1 := ioutil.NopCloser(bytes.NewBuffer(buf)) // ログ出力で使用する用
 		rdr2 := ioutil.NopCloser(bytes.NewBuffer(buf)) // ログ出力以降で使用する用
-
+    
     // リクエストの処理
 		c.Request.Body = rdr2
 		c.Next()
