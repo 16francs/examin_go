@@ -9,3 +9,7 @@ run:
 .PHONY: test
 test:
 	docker-compose run --rm api go test -v -cover ./...
+
+.PHONY: lint
+lint:
+	docker-compose run --rm api golint ./...

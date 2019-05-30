@@ -20,3 +20,6 @@
 # Ignore secret key files
 *.rsa
 *.rsa.pub
+
+# Ignore circleci files
+/.circleci/process.yml
