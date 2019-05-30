@@ -48,7 +48,7 @@ jobs:
       # Install goveralls
       - run:
           name: Install goveralls
-          command: go get github.com/mattn/goverall
+          command: go get -u github.com/mattn/goveralls
 
       # Save cache
       - save_cache:
