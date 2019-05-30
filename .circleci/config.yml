@@ -17,6 +17,15 @@ executors:
           MYSQL_DATABASE: examin_test
     working_directory: /go/src/github.com/16francs/examin_go
 
+commands:
+  restore_modules:
+    steps:
+      # Check go modules cache
+      - restore_cache:
+          name: Restore go modules cache
+          keys:
+            - v1-mod-{{ .Branch }}-{{ checksum "go.mod" }}
+
 jobs:
   setup:
     executor:
@@ -29,15 +38,11 @@ jobs:
           name: Wait for DB
           command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
 
-      # Check go modules cache
-      - restore_cache:
-          name: Restore go modules cache
-          keys:
-            - v1-mod-{{ .Branch }}-{{ checksum "go.mod" }}
-    
+      - restore_modules
+
       # Install modules
       - run:
-          name: Vendoring
+          name: Install modules
           command: go mod download
 
       # Install golint
@@ -62,16 +67,17 @@ jobs:
       name: default
     steps:
       - checkout
-
-      # Run lint
-      - run:
-          name: Run lint
-          command: golint ./...
+      - restore_modules
 
       # Run Test
       - run:
           name: Run test
           command: go test -v -cover ./... -coverprofile=./coverage.out
+
+      # Run lint
+      - run:
+          name: Run lint
+          command: golint ./...
 
       # Create Test Result HTML
       - run:
