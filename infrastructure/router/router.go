@@ -16,6 +16,8 @@ func Router() *gin.Engine {
 
 	router.GET("/health", registry.HealthHandler.GetHealth)
 
+	router.GET("/sample", registry.SampleHandler.GetSample)
+
 	// router.NoRoute()
 
 	return router
