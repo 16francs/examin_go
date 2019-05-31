@@ -1,46 +1,64 @@
-version: 2
+version: 2.1
 
-jobs:
-  build:
+executors:
+  default:
     docker:
-      - image: circleci/golang:1.12
+      - image: circleci/golang:1.12.2
         environment:
           GO111MODULE: 'on'
-          DATABASE_USERNAME: root
-          DATABASE_PASSWORD: ''
           DATABASE_HOST: 127.0.0.1
           DATABASE_PORT: 3306
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: ''
       - image: circleci/mysql:5.7.24
         environment:
-          MYSQL_USER: root
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_ROOT_PASSWORD: ''
           MYSQL_DATABASE: examin_test
     working_directory: /go/src/github.com/16francs/examin_go
+
+commands:
+  restore_modules:
+    steps:
+      # Check go modules cache
+      - restore_cache:
+          name: Restore go modules cache
+          keys:
+            - v1-mod-{{ .Branch }}-{{ checksum "go.mod" }}
+
+jobs:
+  setup:
+    executor:
+      name: default
     steps:
       - checkout
 
       # Database setup
       - run:
           name: Wait for DB
-          command: dockerize -wait tcp://localhost:3306 -timeout 120s
+          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
 
-      - restore_cache:
-          name: Restore go modules cache
-          keys:
-            - mod-{{ .Environment.COMMON_CACHE_KEY }}-{{ checksum "go.mod" }}
-    
-      # Install mod
+      - restore_modules
+
+      # Install modules
       - run:
-          name: Vendoring
+          name: Install modules
           command: go mod download
 
-      # Save cached
+      # Save cache
       - save_cache:
           name: Save go modules cache
-          key: mod-{{ .Environment.COMMON_CACHE_KEY }}-{{ checksum "go.mod" }}
+          key: v1-mod-{{ .Branch }}-{{ checksum "go.mod" }}
           paths:
             - /go/pkg/mod/cache
-    
+  
+  test:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - restore_modules
+
       # Install golint
       - run:
           name: Install golint
@@ -49,7 +67,7 @@ jobs:
       # Install goveralls
       - run:
           name: Install goveralls
-          command: go get github.com/mattn/goveralls
+          command: go get -u github.com/mattn/goveralls
 
       # Run lint
       - run:
@@ -74,3 +92,12 @@ jobs:
       - run:
           name: Post coverage
           command: goveralls -coverprofile=./coverage.out -service=circle-ci -repotoken=$COVERALLS_TOKEN
+
+workflows:
+  setup_and_test:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
+      
