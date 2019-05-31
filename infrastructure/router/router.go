@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/16francs/examin_go/interface/handler"
 	"github.com/16francs/examin_go/interface/middleware"
 	"github.com/16francs/examin_go/registry"
 	"github.com/gin-gonic/gin"
@@ -12,14 +13,14 @@ func Router() *gin.Engine {
 
 	// ルーティング
 	router := gin.Default()
-	router.Use(middleware.RequestLogger())
+	router.Use(middleware.Logger())
 
 	router.GET("/health", registry.HealthHandler.GetHealth)
 
 	router.GET("/sample", registry.SampleHandler.GetSample)
 	router.POST("/sample", registry.SampleHandler.PostSample)
 
-	// router.NoRoute()
+	router.NoRoute(handler.NotFound)
 
 	return router
 }
