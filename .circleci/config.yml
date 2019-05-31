@@ -45,15 +45,15 @@ jobs:
           name: Install modules
           command: go mod download
 
-      # Install golint
-      - run:
-          name: Install golint
-          command: go get -u golang.org/x/lint/golint
+      # # Install golint
+      # - run:
+      #     name: Install golint
+      #     command: go get -u golang.org/x/lint/golint
     
-      # Install goveralls
-      - run:
-          name: Install goveralls
-          command: go get -u github.com/mattn/goveralls
+      # # Install goveralls
+      # - run:
+      #     name: Install goveralls
+      #     command: go get -u github.com/mattn/goveralls
 
       # Save cache
       - save_cache:
@@ -69,15 +69,15 @@ jobs:
       - checkout
       - restore_modules
 
-      # Run Test
-      - run:
-          name: Run test
-          command: go test -v -cover ./... -coverprofile=./coverage.out
-
       # Run lint
       - run:
           name: Run lint
           command: golint ./...
+
+      # Run Test
+      - run:
+          name: Run test
+          command: go test -v -cover ./... -coverprofile=./coverage.out
 
       # Create Test Result HTML
       - run:
