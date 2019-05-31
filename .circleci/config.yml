@@ -45,16 +45,6 @@ jobs:
           name: Install modules
           command: go mod download
 
-      # # Install golint
-      # - run:
-      #     name: Install golint
-      #     command: go get -u golang.org/x/lint/golint
-    
-      # # Install goveralls
-      # - run:
-      #     name: Install goveralls
-      #     command: go get -u github.com/mattn/goveralls
-
       # Save cache
       - save_cache:
           name: Save go modules cache
@@ -68,6 +58,16 @@ jobs:
     steps:
       - checkout
       - restore_modules
+
+      # Install golint
+      - run:
+          name: Install golint
+          command: go get -u golang.org/x/lint/golint
+    
+      # Install goveralls
+      - run:
+          name: Install goveralls
+          command: go get -u github.com/mattn/goveralls
 
       # Run lint
       - run:
