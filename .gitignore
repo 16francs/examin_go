@@ -23,3 +23,6 @@
 
 # Ignore circleci files
 /.circleci/process.yml
+
+# Ignore coverage files
+coverage.*
