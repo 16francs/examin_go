@@ -3,7 +3,8 @@ version: '3.5'
 services:
   api:
     build: 
-      context: ./docker/containers/api
+      context: .
+      dockerfile: ./docker/containers/api/Dockerfile
     volumes:
       - ./:/go/src/app:cached
     ports: 
