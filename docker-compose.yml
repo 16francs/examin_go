@@ -11,6 +11,14 @@ services:
       - 8080:8080
     tty: true
     stdin_open: true
+    environment:
+      DB_NAME: examin
+      DB_USERNAME: root
+      DB_PASSWORD: ''
+      DB_HOST: db
+      DB_PORT: 3306
+    depends_on:
+      - db
 
   db:
     build:
@@ -21,8 +29,9 @@ services:
       - 3316:3306
     restart: always
     environment:
-      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
-      TZ: "Asia/Tokyo"
+      MYSQL_DATABASE: examin
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+      TZ: 'Asia/Tokyo'
 
 volumes:
   db_data:
