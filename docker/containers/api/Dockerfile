@@ -8,7 +8,13 @@ RUN apk add --no-cache \
         alpine-sdk \
         git
 
-RUN go get github.com/pilu/fresh
+COPY go.mod go.sum ./
+
+RUN go mod download
+
+RUN go get -u github.com/pilu/fresh
+
+COPY . .
 
 EXPOSE 8080
 
