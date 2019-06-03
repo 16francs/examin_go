@@ -5,7 +5,9 @@ DBへアクセスする処理を記述
 
 -> gorm を使う
 
-```
+## テンプレート
+
+```go
 type userRepository struct {
 }
 

@@ -26,7 +26,7 @@ func NewSampleHandler(u usecase.SampleUsecase) SampleHandler {
 func (h *sampleHandler) GetSample(c *gin.Context) {
 	response, err := h.usecase.GetSample()
 	if err != nil {
-		c.JSON(500, err)
+		ServerError(c)
 		return
 	}
 
@@ -36,13 +36,13 @@ func (h *sampleHandler) GetSample(c *gin.Context) {
 func (h *sampleHandler) PostSample(c *gin.Context) {
 	var request request.PostSample
 	if err := c.BindJSON(&request); err != nil {
-		c.JSON(400, err)
+		BadRequest(c)
 		return
 	}
 
 	response, err := h.usecase.PostSample(request.Name)
 	if err != nil {
-		c.JSON(500, err)
+		ServerError(c)
 		return
 	}
 

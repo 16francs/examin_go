@@ -3,28 +3,80 @@
 アプリケーション層から渡された値に対して処理を行う　　
 いわゆる MVCS(Model View Controller Service) の S
 
+## テンプレート
+
+```go
+package service
+
+import (
+	"fmt"
+
+	"github.com/16francs/examin_go/domain/model"
+)
+
+// SampleService - Service のサンプルインターフェース
+type SampleService interface {
+	GetSample() (*model.Sample, error)
+	PostSample(name string) (*model.Sample, error)
+}
+
+type sampleService struct {
+}
+
+// NewSampleService - SampleService の生成
+func NewSampleService() SampleService {
+	return &sampleService{}
+}
+
+func (s *sampleService) GetSample() (*model.Sample, error) {
+	sample := &model.Sample{Message: "Hello, World!!"}
+	return sample, nil
+}
+
+func (s *sampleService) PostSample(name string) (*model.Sample, error) {
+	message := fmt.Sprintf("Hello, %s!!", name)
+	sample := &model.Sample{Message: message}
+	return sample, nil
+}
 ```
-// UserService - User の Service インターフェース
-type UserService interface {
-  FindUser(userID uint) (*model.User, error)
+
+## テストのテンプレート
+
+```go
+package service
+
+import (
+	"reflect"
+	"testing"
+
+	"github.com/16francs/examin_go/domain/model"
+)
+
+func TestSampleService_GetSample(t *testing.T) {
+	target := NewSampleService()
+	want := &model.Sample{Message: "Hello, World!!"}
+	got, err := target.GetSample()
+
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
+
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("want %#v, but %#v", want, got)
+	}
 }
 
-type userService struct {
-  repository repository.UserRepository
-}
+func TestSampleService_PostSample(t *testing.T) {
+	target := NewSampleService()
+	want := &model.Sample{Message: "Hello, Taro!!"}
+	got, err := target.PostSample("Taro")
 
-// NewUserService - userService の生成
-func NewUserService(r repository.UserRepository) UserService {
-  return &userService{repository: r}
-}
+	if err != nil {
+		t.Fatalf("error: %v", err)
+	}
 
-// ユーザ情報の取得
-func (s *userService) FindUser(userID uint) (*model.User, error) {
-  user, err := s.repository.FindUser(userID)
-  if err != nil {
-    return nil, err
-  }
-
-  return user, nil
+	if !reflect.DeepEqual(got, want) {
+		t.Fatalf("want %#v, but %#v", want, got)
+	}
 }
 ```
