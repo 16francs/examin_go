@@ -8,7 +8,9 @@ run:
 
 .PHONY: db-create
 db-create:
-	sh ./docker/bin/create-db.sh
+	docker-compose up -d
+	- sh ./docker/bin/create-db.sh
+	docker-compose down 
 
 .PHONY: db-migrate
 db-migrate:
