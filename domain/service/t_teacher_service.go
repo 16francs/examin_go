@@ -23,7 +23,7 @@ func (s *tTeacherService) CreateTeacher(loginID, name, school string) (*model.Us
 	// TODO: パスワードのハッシュ化処理
 
 	teacher := &model.User{
-		LoginId:  loginID,
+		LoginID:  loginID,
 		Name:     name,
 		School:   school,
 		Password: loginID,
