@@ -27,7 +27,7 @@ func (s *tTeacherService) CreateTeacher(loginID, name, school string) (*model.Us
 		Name:     name,
 		School:   school,
 		Password: loginID,
-		Role:			0,
+		Role:     0,
 	}
 
 	createdTeacher, err := s.repository.CreateTeacher(teacher)

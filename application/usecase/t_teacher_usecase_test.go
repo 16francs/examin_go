@@ -13,16 +13,16 @@ type TTeacherServiceMock struct {
 
 func (m *TTeacherServiceMock) CreateTeacher(loginID, name, school string) (*model.User, error) {
 	teacher := &model.User{
-		Base:	model.Base{
-			ID: 1,
+		Base: model.Base{
+			ID:        1,
 			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
-		LoginID: loginID,
+		LoginID:  loginID,
 		Password: "password",
-		Name: name,
-		School: school,
-		Role: 0,
+		Name:     name,
+		School:   school,
+		Role:     0,
 	}
 	return teacher, nil
 }
@@ -31,15 +31,15 @@ func TestTTeacherUsecase_CreateTeacher(t *testing.T) {
 	target := NewTTeacherUsecase(&TTeacherServiceMock{})
 	want := &model.User{
 		Base: model.Base{
-			ID: 1,
+			ID:        1,
 			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
-		LoginID: "LoginID",
+		LoginID:  "LoginID",
 		Password: "password",
-		Name: "name",
-		School: "school",
-		Role: 0,
+		Name:     "name",
+		School:   "school",
+		Role:     0,
 	}
 	got, err := target.CreateTeacher("LoginID", "name", "school")
 
