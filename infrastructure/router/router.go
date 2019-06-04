@@ -20,6 +20,12 @@ func Router() *gin.Engine {
 	router.GET("/sample", registry.SampleHandler.GetSample)
 	router.POST("/sample", registry.SampleHandler.PostSample)
 
+	// teachers routes
+	teachers := router.Group("/teachers")
+	{
+		teachers.POST("/teachers", registry.TTeacherHandler.CreateTeacher)
+	}
+
 	router.NoRoute(handler.NotFound)
 
 	return router

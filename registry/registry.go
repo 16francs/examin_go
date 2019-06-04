@@ -3,6 +3,7 @@ package registry
 import (
 	"github.com/16francs/examin_go/application/usecase"
 	"github.com/16francs/examin_go/domain/service"
+	"github.com/16francs/examin_go/infrastructure/datastore"
 	"github.com/16francs/examin_go/interface/handler"
 )
 
@@ -11,6 +12,7 @@ import (
 type Registry struct {
 	handler.HealthHandler
 	handler.SampleHandler
+	handler.TTeacherHandler
 }
 
 // NewRegistry - registry の生成
@@ -21,8 +23,14 @@ func NewRegistry() Registry {
 	sampleUsecase := usecase.NewSampleUsecase(sampleService)
 	sampleHandler := handler.NewSampleHandler(sampleUsecase)
 
+	tTeacherRepository := datastore.NewTTeacherRepository()
+	tTeacherService := service.NewTTeacherService(tTeacherRepository)
+	tTeacherUsecase := usecase.NewTTeacherUsecase(tTeacherService)
+	tTeacherHandler := handler.NewTTeacherHandler(tTeacherUsecase)
+
 	return Registry{
 		healthHandler,
 		sampleHandler,
+		tTeacherHandler,
 	}
 }
