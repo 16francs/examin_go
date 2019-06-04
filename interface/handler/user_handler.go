@@ -16,11 +16,16 @@ type userHandler struct {
 	usecase usecase.UserUsecase
 }
 
-func NewUserHandler() UserHandler {
-	return &userHandler{}
+func NewUserHandler(u usecase.UserUsecase) UserHandler {
+	return &userHandler{usecase: u}
 }
 
 func (h *userHandler) CreateUser(c *gin.Context) {
 	var request request.CreateUser
-	
+	if err := c.BindJSON(&request); err != nil {
+		BadRequest(c)
+		return
+	}
+
+	c.JSON(http.StatusOK, request)
 }

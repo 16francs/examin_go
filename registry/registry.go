@@ -3,7 +3,7 @@ package registry
 import (
 	"github.com/16francs/examin_go/application/usecase"
 	"github.com/16francs/examin_go/domain/service"
-	"github.com/16francs/examin_go/domain/repository"
+	"github.com/16francs/examin_go/infrastructure/datastore"
 	"github.com/16francs/examin_go/interface/handler"
 )
 
@@ -23,7 +23,7 @@ func NewRegistry() Registry {
 	sampleUsecase := usecase.NewSampleUsecase(sampleService)
 	sampleHandler := handler.NewSampleHandler(sampleUsecase)
 
-	userRepository := repository.UserRepository()
+	userRepository := datastore.NewUserRepository()
 	userService := service.NewUserService(userRepository)
 	userUsecase := usecase.NewUserUsecase(userService)
 	userHandler := handler.NewUserHandler(userUsecase)
@@ -31,6 +31,6 @@ func NewRegistry() Registry {
 	return Registry{
 		healthHandler,
 		sampleHandler,
-		userHandler
+		userHandler,
 	}
 }
