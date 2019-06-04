@@ -1,8 +1,8 @@
 package request
 
-type UserCreate struct {
-	LoginId string `json:"login_id" binding:"required"`
+type CreateUser struct {
+	LoginId  string `json:"login_id" binding:"required"`
 	Password string `json:"password"  binding:"required"`
-	Name string `json:"name"  binding:"required"`
-	School string `json:"school"`
+	Name     string `json:"name"  binding:"required"`
+	School   string `json:"school"`
 }

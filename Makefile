@@ -23,3 +23,7 @@ test:
 .PHONY: lint
 lint:
 	docker-compose run --rm api golint ./...
+
+.PHONY: fmt
+fmt:
+	go fmt ./...
