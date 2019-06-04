@@ -20,6 +20,8 @@ func Router() *gin.Engine {
 	router.GET("/sample", registry.SampleHandler.GetSample)
 	router.POST("/sample", registry.SampleHandler.PostSample)
 
+	router.POST("/api/users", registry.UserHandler.CreateUser)
+
 	router.NoRoute(handler.NotFound)
 
 	return router
