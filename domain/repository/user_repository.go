@@ -5,5 +5,5 @@ import (
 )
 
 type UserRepository interface {
-	Create(user model.User) error
+	Create(user *model.User) error
 }

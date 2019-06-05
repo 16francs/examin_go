@@ -26,6 +26,9 @@ func (h *userHandler) CreateUser(c *gin.Context) {
 		BadRequest(c)
 		return
 	}
-
+	err := h.usecase.Create(request)
+	if err != nil {
+		return
+	}
 	c.JSON(http.StatusOK, request)
 }

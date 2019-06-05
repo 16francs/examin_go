@@ -13,7 +13,7 @@ func NewUserRepository() repository.UserRepository {
 	return &userRepository{}
 }
 
-func (u *userRepository) Create(user model.User) error {
+func (u *userRepository) Create(user *model.User) error {
 	db := Connect()
 	defer db.Close()
 

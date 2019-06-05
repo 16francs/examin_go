@@ -8,7 +8,7 @@ import (
 )
 
 type UserService interface {
-	Create(user model.User) error
+	Create(user *model.User) error
 }
 
 type userService struct {
@@ -19,7 +19,7 @@ func NewUserService(u repository.UserRepository) UserService {
 	return &userService{u}
 }
 
-func (u *userService) Create(user model.User) error {
+func (u *userService) Create(user *model.User) error {
 	hash, err := middleware.GenerateHash(user.Password)
 	if err != nil {
 		return err
