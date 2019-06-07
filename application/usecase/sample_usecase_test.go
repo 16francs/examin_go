@@ -47,5 +47,5 @@ func TestSampleUsecase_PostSample(t *testing.T) {
 
 	if !reflect.DeepEqual(got, want) {
 		t.Fatalf("want %#v, but %#v", want, got)
-	}	
+	}
 }
