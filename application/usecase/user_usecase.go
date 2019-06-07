@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	// "github.com/16francs/examin_go/domain/model"
+	"github.com/16francs/examin_go/domain/model"
 	"github.com/16francs/examin_go/domain/service"
 	"github.com/16francs/examin_go/interface/request"
 )
@@ -19,7 +19,13 @@ func NewUserUsecase(s service.UserService) UserUsecase {
 }
 
 func (u *userUsecase) Create(request request.CreateUser) error {
-	user := request.ToUser()
+	user := &model.User{
+		LoginID:  request.LoginId,
+		Password: request.Password,
+		Name:     request.Name,
+		School:   request.School,
+		Role:     0,
+	}
 	err := u.service.Create(user)
 	if err != nil {
 		return err

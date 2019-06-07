@@ -28,7 +28,8 @@ func (h *userHandler) CreateUser(c *gin.Context) {
 	}
 	err := h.usecase.Create(request)
 	if err != nil {
+		ServerError(c)
 		return
 	}
-	c.JSON(http.StatusOK, request)
+	c.JSON(http.StatusCreated, gin.H{"message": "created"})
 }
