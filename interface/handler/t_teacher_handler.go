@@ -10,14 +10,14 @@ import (
 
 // TTeacherHandler - 講師用の講師ハンドラ
 type TTeacherHandler interface {
-	CreateTeacher(C *gin.Context)
+	CreateTeacher(c *gin.Context)
 }
 
 type tTeacherHandler struct {
 	usecase usecase.TTeacherUsecase
 }
 
-// NewTeacherHandler - tTeacherHandler の生成
+// NewTTeacherHandler - tTeacherHandler の生成
 func NewTTeacherHandler(u usecase.TTeacherUsecase) TTeacherHandler {
 	return &tTeacherHandler{usecase: u}
 }

@@ -25,6 +25,7 @@ func Router() *gin.Engine {
 	// teachers routes
 	teachers := router.Group("/teachers")
 	{
+		teachers.POST("/problems", registry.TProblemHandler.CreateProblem)
 		teachers.POST("/teachers", registry.TTeacherHandler.CreateTeacher)
 	}
 

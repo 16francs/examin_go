@@ -4,6 +4,6 @@ package model
 type Problem struct {
 	Base
 	Title   string `json:"title"`
-	Conetnt string `json:"content"`
+	Content string `json:"content"`
 	UserID  uint   `json:"user_id"`
 }
