@@ -24,6 +24,12 @@ func Router() *gin.Engine {
 
 	router.POST("/api/auth", registry.AuthHandler.SignIn)
 
+	auth := router.Group("/api")
+	auth.Use(middleware.Auth())
+	{
+		auth.GET("/auth", registry.AuthHandler.AuthCheck)
+	}
+
 	router.NoRoute(handler.NotFound)
 
 	return router

@@ -10,6 +10,7 @@ import (
 
 type AuthHandler interface {
 	SignIn(c *gin.Context)
+	AuthCheck(c *gin.Context)
 }
 
 type authHandler struct {
@@ -34,5 +35,11 @@ func (h *authHandler) SignIn(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"message":       "success",
 		"Authorization": token,
+	})
+}
+
+func (h *authHandler) AuthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		"message": "認証確認済み",
 	})
 }
