@@ -3,11 +3,12 @@ package service
 import (
 	"github.com/16francs/examin_go/domain/model"
 	"github.com/16francs/examin_go/domain/repository"
+	"github.com/16francs/examin_go/interface/middleware"
 )
 
 // TTeacherService - 講師向け TeacherService
 type TTeacherService interface {
-	CreateTeacher(loginID, name, school string) (*model.User, error)
+	CreateTeacher(teacher *model.User) (*model.User, error)
 }
 
 type tTeacherService struct {
@@ -19,16 +20,13 @@ func NewTTeacherService(r repository.TTeacherRepository) TTeacherService {
 	return &tTeacherService{repository: r}
 }
 
-func (s *tTeacherService) CreateTeacher(loginID, name, school string) (*model.User, error) {
+func (s *tTeacherService) CreateTeacher(teacher *model.User) (*model.User, error) {
 	// TODO: パスワードのハッシュ化処理
-
-	teacher := &model.User{
-		LoginID:  loginID,
-		Name:     name,
-		School:   school,
-		Password: loginID,
-		Role:     0,
+	hashPassword, err := middleware.GenerateHash(teacher.Password)
+	if err != nil {
+		return nil, err
 	}
+	teacher.Password = hashPassword
 
 	createdTeacher, err := s.repository.CreateTeacher(teacher)
 	if err != nil {

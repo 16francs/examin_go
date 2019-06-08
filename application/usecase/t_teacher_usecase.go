@@ -20,10 +20,18 @@ func NewTTeacherUsecase(s service.TTeacherService) TTeacherUsecase {
 }
 
 func (u *tTeacherUsecase) CreateTeacher(loginID, name, school string) (*model.User, error) {
-	teacher, err := u.service.CreateTeacher(loginID, name, school)
+	teacher := &model.User{
+		LoginID:  loginID,
+		Name:     name,
+		School:   school,
+		Password: loginID,
+		Role:     0,
+	}
+
+	createdTeacher, err := u.service.CreateTeacher(teacher)
 	if err != nil {
 		return nil, err
 	}
 
-	return teacher, nil
+	return createdTeacher, nil
 }

@@ -6,41 +6,37 @@ import (
 	"time"
 
 	"github.com/16francs/examin_go/domain/model"
+	"github.com/16francs/examin_go/interface/middleware"
 )
 
-type TTeacherServiceMock struct {
-}
+var (
+	hashPassword, _ = middleware.GenerateHash("LoginID")
 
-func (m *TTeacherServiceMock) CreateTeacher(loginID, name, school string) (*model.User, error) {
-	teacher := &model.User{
-		Base: model.Base{
-			ID:        1,
-			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
-			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
-		},
-		LoginID:  loginID,
-		Password: "password",
-		Name:     name,
-		School:   school,
-		Role:     0,
-	}
-	return teacher, nil
-}
-
-func TestTTeacherUsecase_CreateTeacher(t *testing.T) {
-	target := NewTTeacherUsecase(&TTeacherServiceMock{})
-	want := &model.User{
+	createdTeacherMock = &model.User{
 		Base: model.Base{
 			ID:        1,
 			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
 		LoginID:  "LoginID",
-		Password: "password",
+		Password: hashPassword,
 		Name:     "name",
 		School:   "school",
-		Role:     0,
+		Role:     0,	
 	}
+)
+
+type TTeacherServiceMock struct {
+}
+
+func (m *TTeacherServiceMock) CreateTeacher(teacher *model.User) (*model.User, error) {
+	createdTeacher := createdTeacherMock
+	return createdTeacher, nil
+}
+
+func TestTTeacherUsecase_CreateTeacher(t *testing.T) {
+	target := NewTTeacherUsecase(&TTeacherServiceMock{})
+	want := createdTeacherMock
 	got, err := target.CreateTeacher("LoginID", "name", "school")
 
 	if err != nil {
