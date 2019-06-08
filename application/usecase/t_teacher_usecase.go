@@ -20,12 +20,14 @@ func NewTTeacherUsecase(s service.TTeacherService) TTeacherUsecase {
 }
 
 func (u *tTeacherUsecase) CreateTeacher(loginID, name, school string) (*model.User, error) {
+	// パスワードは login_id と同じ
+	// 権限は デフォルト 1 で登録 ( 0: 生徒, 1: 講師, 2: 管理者 )
 	teacher := &model.User{
 		LoginID:  loginID,
 		Name:     name,
 		School:   school,
 		Password: loginID,
-		Role:     0,
+		Role:     1,
 	}
 
 	createdTeacher, err := u.service.CreateTeacher(teacher)
