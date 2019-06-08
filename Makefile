@@ -6,6 +6,10 @@ build:
 run:
 	docker-compose up
 
+.PHONY: down
+down:
+	docker-compose down
+
 .PHONY: db-create
 db-create:
 	docker-compose up -d
