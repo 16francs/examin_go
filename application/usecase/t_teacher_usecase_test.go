@@ -22,7 +22,7 @@ var (
 		Password: hashPassword,
 		Name:     "name",
 		School:   "school",
-		Role:     0,	
+		Role:     1,
 	}
 )
 
