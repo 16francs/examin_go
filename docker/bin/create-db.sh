@@ -1,7 +1,7 @@
 #!/bin/bash
 
 docker-compose run --rm db mysql -h db -u root 1> /dev/null << EOF
-CREATE DATABASE examin;
+CREATE DATABASE examin DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_general_ci;
 EOF
 
 if [ $? = 0 ]; then
