@@ -42,7 +42,7 @@ func GenerateToken(user model.User) (string, error) {
 	jwt tokenから情報を取り出す
 	ここではlogin_idを返却する
 */
-func Parse(ctx *gin.Context) (string, string, error) {
+func Parse(ctx *gin.Context) (string, error) {
 
 	token, err := request.ParseFromRequest(ctx.Request, request.OAuth2Extractor,
 		func(token *jwt.Token) (interface{}, error) {
