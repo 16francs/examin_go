@@ -1,0 +1,704 @@
+swagger: '2.0'
+info:
+  description: examin API 設計
+  version: 0.0.1
+  title: examin
+schemes:
+  - http
+host: localhost:8080
+basePath: /api
+produces:
+  - application/json
+paths:
+  /auth:
+    post:
+      tags:
+        - 認証用API
+      summary: ログイン認証用API
+      parameters:
+        - in: body
+          name: auth
+          schema:
+            type: object
+            properties:
+              login_id:
+                type: string
+              password:
+                type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Auth'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    get:
+      tags:
+        - 認証用API
+      summary: 認証情報取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/Auth'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /users/me:
+    get:
+      tags:
+        - Users API
+      summary: ユーザー情報取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    patch:
+      tags:
+        - Users API
+      summary: ユーザー情報編集API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - name: user
+          in: body
+          schema:
+            properties:
+              user:
+                type: object
+                properties:
+                  login_id:
+                    type: string
+                  name:
+                    type: string
+                  school:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/User'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /users/check_unique:
+    post:
+      tags:
+        - Users API
+      summary: ユニーク制約用API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - name: user
+          in: body
+          schema:
+            properties:
+              user:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  login_id:
+                    type: string
+      responses:
+        '200':
+          description: OK
+          schema:
+            $ref: '#/definitions/CheckUnique'
+  '/students/problems/{problem_id}/achievement':
+    post:
+      tags:
+        - Students / Achievement API
+      summary: 成績登録API
+      parameters:
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - name: achievements
+          in: body
+          schema:
+            properties:
+              achievements:
+                type: array
+                items:
+                  properties:
+                    question_id:
+                      type: integer
+                    user_choice:
+                      type: integer
+                    result:
+                      type: boolean
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '201':
+          $ref: '#/definitions/StudentsAchievement'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /students/problems:
+    get:
+      tags:
+        - Students / Problems API
+      summary: 問題集一覧取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            properties:
+              problems:
+                $ref: '#/definitions/StudentsProblems'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/students/problems/{problem_id}':
+    get:
+      tags:
+        - Students / Problems API
+      summary: 問題集詳細取得API
+      parameters:
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          $ref: '#/definitions/StudentsProblem'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /teachers/problems:
+    get:
+      tags:
+        - Teachers / Problems API
+      summary: 問題集一覧取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: 更新日時が新しい順
+          schema:
+            properties:
+              problems:
+                $ref: '#/definitions/TeachersProblems'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    post:
+      tags:
+        - Teachers / Problems API
+      summary: 問題集登録API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: body
+          name: problem
+          schema:
+            properties:
+              problem:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  content:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: string
+      responses:
+        '201':
+          $ref: '#/definitions/TeachersProblem'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/teachers/problems/{problem_id}/download':
+    get:
+      tags:
+        - Teachers / Problems API
+      summary: 問題集出力API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - in: header
+          name: ResponseType
+          description: ダウンロードファイルの形式
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/teachers/problems/{problem_id}/test':
+    post:
+      tags:
+        - Teachers / Problems API
+      summary: テスト出力API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - in: header
+          name: ResponseType
+          description: ダウンロードファイルの形式
+          type: string
+        - in: body
+          name: test
+          schema:
+            properties:
+              test:
+                type: object
+                properties:
+                  count:
+                    type: integer
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/teachers/problems/{problem_id}/questions':
+    get:
+      tags:
+        - Teachers / Questions API
+      summary: 問題一覧取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+      responses:
+        '200':
+          $ref: '#/definitions/TeachersQuestions'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    post:
+      tags:
+        - Teachers / Questions API
+      summary: 問題登録API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - in: body
+          name: question
+          schema:
+            properties:
+              question:
+                type: object
+                properties:
+                  sentence:
+                    type: string
+                  correct:
+                    type: string
+      responses:
+        '201':
+          $ref: '#/definitions/Question'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/teachers/problems/download':
+    get:
+      tags:
+        - Teachers / Questions API
+      summary: 問題一括登録テンプレートダウンロードAPI
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: header
+          name: ResponseType
+          description: ダウンロードファイルの形式
+          type: string
+      responses:
+        '200':
+          description: OK
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  '/teachers/problems/{problem_id}/upload':
+    post:
+      tags:
+        - Teachers / Questions API
+      summary: 問題一括登録テンプレートアップロードAPI
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - in: path
+          name: problem_id
+          type: integer
+          required: true
+        - in: body
+          name: file
+          schema:
+            properties:
+              file:
+                type: object
+      responses:
+        '201':
+          description: OK
+          schema:
+            properties:
+              questions:
+                $ref: '#/definitions/TeachersQuestions'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /teachers/students:
+    get:
+      tags:
+        - Teachers / Students API
+      summary: 生徒一覧取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            properties:
+              students:
+                $ref: '#/definitions/TeachersStudents'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    post:
+      tags:
+        - Teachers / Students API
+      summary: 生徒登録API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - name: student
+          in: body
+          schema:
+            properties:
+              student:
+                type: object
+                properties:
+                  login_id:
+                    type: string
+                  name:
+                    type: string
+                  school:
+                    type: string
+      responses:
+        '201':
+          $ref: '#/definitions/User'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+  /teachers/teachers:
+    get:
+      tags:
+        - Teachers / Teachers API
+      summary: 講師一覧取得API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+      responses:
+        '200':
+          description: OK
+          schema:
+            properties:
+              teachers:
+                $ref: '#/definitions/TeachersTeachers'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+    post:
+      tags:
+        - Teachers / Teachers API
+      summary: 講師登録API
+      parameters:
+        - $ref: '#/parameters/AuthorizationParam'
+        - name: teacher
+          in: body
+          schema:
+            properties:
+              teacher:
+                type: object
+                properties:
+                  login_id:
+                    type: string
+                  name:
+                    type: string
+                  school:
+                    type: string
+      responses:
+        '201':
+          $ref: '#/definitions/User'
+        '400':
+          $ref: '#/responses/BadRequest'
+        '401':
+          $ref: '#/responses/UnAuthorized'
+parameters:
+  AuthorizationParam:
+    in: header
+    name: Authorization
+    description: 実行時に返ってくる値 or Cookie に入っている値
+    type: string
+    required: true
+responses:
+  BadRequest:
+    description: リクエスト情報が正しくない．
+    schema:
+      $ref: '#/definitions/Error'
+  UnAuthorized:
+    description: 未ログイン．
+    schema:
+      $ref: '#/definitions/Error'
+  Forbidden:
+    description: 権限がない．
+    schema:
+      $ref: '#/definitions/Error'
+  NotFound:
+    description: ページが見つからない．
+    schema:
+      $ref: '#/definitions/Error'
+  ServerError:
+    description: サーバーエラー．
+    schema:
+      $ref: '#/definitions/Error'
+definitions:
+  Auth:
+    type: object
+    properties:
+      token:
+        type: string
+      exprired_at:
+        type: string
+        format: date-time
+      user:
+        type: object
+        properties:
+          id:
+            type: integer
+          role:
+            type: integer
+  CheckUnique:
+    type: object
+    properties:
+      check_unique:
+        type: boolean
+        example: true
+  Error:
+    type: object
+    properties:
+      status:
+        type: integer
+      description:
+        type: string
+  Problem:
+    type: object
+    properties:
+      id:
+        type: integer
+      teacher_id:
+        type: integer
+      title:
+        type: string
+      content:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  Question:
+    type: object
+    properties:
+      id:
+        type: integer
+      problem_id:
+        type: integer
+      sentence:
+        type: string
+      correct:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  User:
+    type: object
+    properties:
+      id:
+        type: integer
+      login_id:
+        type: string
+      name:
+        type: string
+      school:
+        type: string
+      role:
+        type: integer
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  StudentsAchievement:
+    type: object
+    properties:
+      id:
+        type: integer
+      problem_id:
+        type: integer
+      user_id:
+        type: integer
+      achievements:
+        type: array
+        items:
+          properties:
+            id:
+              type: integer
+            question_id:
+              type: integer
+            user_choice:
+              type: integer
+            result:
+              type: boolean
+  StudentsProblem:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      user_id:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      questions:
+        type: array
+        items:
+          properties:
+            id:
+              type: integer
+            sentence:
+              type: string
+            correct:
+              type: string
+  StudentsProblems:
+    type: array
+    items:
+      $ref: '#/definitions/Problem'
+  TeachersProblem:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      content:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      teacher_name:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+  TeachersProblems:
+    type: array
+    items:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        teacher_name:
+          type: string
+        updated_at:
+          type: string
+          format: date-time
+  TeachersQuestions:
+    type: object
+    properties:
+      id:
+        type: integer
+      title:
+        type: string
+      content:
+        type: string
+      tags:
+        type: array
+        items:
+          type: string
+      count:
+        type: integer
+      teacher_name:
+        type: string
+      created_at:
+        type: string
+        format: date-time
+      updated_at:
+        type: string
+        format: date-time
+      questions:
+        type: array
+        items:
+          properties:
+            id:
+              type: integer
+            sentence:
+              type: string
+            correct:
+              type: string
+            created_at:
+              type: string
+              format: date-time
+            updated_at:
+              type: string
+              format: date-time
+  TeachersStudents:
+    type: array
+    items:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        school:
+          type: string
+        login_id:
+          type: string
+  TeachersTeachers:
+    type: array
+    items:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        school:
+          type: string
+        login_id:
+          type: string
+        role:
+          type: number
