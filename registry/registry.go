@@ -13,6 +13,7 @@ type Registry struct {
 	handler.HealthHandler
 	handler.SampleHandler
 	handler.UserHandler
+	handler.AuthHandler
 }
 
 // NewRegistry - registry の生成
@@ -28,9 +29,14 @@ func NewRegistry() Registry {
 	userUsecase := usecase.NewUserUsecase(userService)
 	userHandler := handler.NewUserHandler(userUsecase)
 
+	authService := service.NewAuthService(userRepository)
+	authUsecase := usecase.NewAuthUsecase(authService)
+	authHandler := handler.NewAuthHandler(authUsecase)
+
 	return Registry{
 		healthHandler,
 		sampleHandler,
 		userHandler,
+		authHandler,
 	}
 }
