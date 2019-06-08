@@ -27,3 +27,11 @@ lint:
 .PHONY: fmt
 fmt:
 	go fmt ./...
+
+.PHONY: swagger-start
+swagger-start:
+	sh ./bin/swagger-start.sh
+
+.PHONY: swagger-stop
+swagger-stop:
+	docker stop swagger
