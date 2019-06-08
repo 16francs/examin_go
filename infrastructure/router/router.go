@@ -22,6 +22,12 @@ func Router() *gin.Engine {
 
 	router.POST("/api/users", registry.UserHandler.CreateUser)
 
+	// teachers routes
+	teachers := router.Group("/teachers")
+	{
+		teachers.POST("/teachers", registry.TTeacherHandler.CreateTeacher)
+	}
+
 	router.NoRoute(handler.NotFound)
 
 	return router
