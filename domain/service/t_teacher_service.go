@@ -21,7 +21,7 @@ func NewTTeacherService(r repository.TTeacherRepository) TTeacherService {
 }
 
 func (s *tTeacherService) CreateTeacher(teacher *model.User) (*model.User, error) {
-	// TODO: パスワードのハッシュ化処理
+	// パスワードのハッシュ化処理
 	hashPassword, err := middleware.GenerateHash(teacher.Password)
 	if err != nil {
 		return nil, err
