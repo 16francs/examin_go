@@ -20,7 +20,7 @@ func NewUserUsecase(s service.UserService) UserUsecase {
 
 func (u *userUsecase) Create(request request.CreateUser) error {
 	user := &model.User{
-		LoginID:  request.LoginId,
+		LoginID:  request.LoginID,
 		Password: request.Password,
 		Name:     request.Name,
 		School:   request.School,
