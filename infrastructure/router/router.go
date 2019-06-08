@@ -30,6 +30,12 @@ func Router() *gin.Engine {
 		auth.GET("/auth", registry.AuthHandler.AuthCheck)
 	}
 
+	// teachers routes
+	teachers := router.Group("/teachers")
+	{
+		teachers.POST("/teachers", registry.TTeacherHandler.CreateTeacher)
+	}
+
 	router.NoRoute(handler.NotFound)
 
 	return router
