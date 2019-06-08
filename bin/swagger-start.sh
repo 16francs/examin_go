@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 8000 ポートが使用可能かの確認
-lsof -i :8000 | grep "*:irdmi (LISTEN)" &> /dev/null
+lsof -i :8000 | grep "(LISTEN)" &> /dev/null
 
 # 上のコマンドが正常に実行される -> 何かのアプリ起動してる
 if [ $? = 0 ]; then
