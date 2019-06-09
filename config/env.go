@@ -10,6 +10,8 @@ type Env struct {
 	DBPassword string `envconfig:"DB_PASSWORD" default:"examin"`
 	DBHost     string `envconfig:"DB_HOST" default:"127.0.0.1"`
 	DBPort     string `envconfig:"DB_PORT" default:"3306"`
+	Secret     string `envconfig:"SECRET_KEY" default:"4CHtx3AAnOPrxWYvqsHou6w8b8aO3BF7Ey93/D4clbBsgMDZf9Zt+Q=="`
+	Iss        string `envconfig:"ISS_USER" default:"16france"`
 }
 
 // LoadEnv - 環境変数の読み込み
