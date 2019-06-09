@@ -22,6 +22,14 @@ func Router() *gin.Engine {
 
 	router.POST("/api/users", registry.UserHandler.CreateUser)
 
+	router.POST("/api/auth", registry.AuthHandler.SignIn)
+
+	auth := router.Group("/api")
+	auth.Use(middleware.Auth())
+	{
+		auth.GET("/auth", registry.AuthHandler.AuthCheck)
+	}
+
 	// teachers routes
 	teachers := router.Group("/teachers")
 	{
