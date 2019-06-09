@@ -34,7 +34,7 @@ func dbConfig() string {
 	port := env.DBPort
 	database := env.DBName
 
-	connect := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	connect := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		username,
 		password,
 		host,

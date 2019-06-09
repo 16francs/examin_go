@@ -24,6 +24,7 @@ services:
     build:
       context: ./docker/containers/db
     volumes:
+      - ./docker/containers/db/my.cnf:/etc/mysql/conf.d/my.cnf
       - db_data:/var/lib/mysql
     ports: 
       - 3316:3306
