@@ -26,3 +26,6 @@
 
 # Ignore coverage files
 coverage.*
+
+# direnv
+.envrc
