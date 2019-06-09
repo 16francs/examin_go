@@ -12,7 +12,7 @@ import (
 */
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		LoginID, Role, err := Parse(c)
+		loginID, role, err := Parse(c)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"status":      http.StatusText(http.StatusUnauthorized),
@@ -22,8 +22,8 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
-		c.Set("LoginID", LoginID)
-		c.Set("Role", Role)
+		c.Set("LoginID", loginID)
+		c.Set("Role", role)
 		c.Next()
 	}
 }
@@ -57,8 +57,8 @@ func TeachersAuth() gin.HandlerFunc {
 }
 
 func roleCheck(c *gin.Context, r int) {
-	Role := c.MustGet("Role")
-	if Role != r {
+	role := c.MustGet("Role")
+	if role != r {
 		c.JSON(http.StatusUnauthorized, gin.H{
 			"status":      http.StatusText(http.StatusForbidden),
 			"description": "認証エラーです．",

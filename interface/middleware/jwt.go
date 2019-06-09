@@ -1,18 +1,15 @@
 package middleware
 
 import (
+	"log"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
 	request "github.com/dgrijalva/jwt-go/request"
 	"github.com/gin-gonic/gin"
 
+	"github.com/16francs/examin_go/config"
 	"github.com/16francs/examin_go/domain/model"
-)
-
-const (
-	secret = "4CHtx3AAnOPrxWYvqsHou6w8b8aO3BF7Ey93/D4clbBsgMDZf9Zt+Q=="
-	iss    = "16france"
 )
 
 /*
@@ -25,17 +22,22 @@ jwt tokenを生成する
 */
 func GenerateToken(user model.User) (string, error) {
 
+	env, err := config.LoadEnv()
+	if err != nil {
+		log.Fatalf("alert: %s", err)
+	}
+
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
 	token.Claims = jwt.MapClaims{
-		"iss":  iss,
+		"iss":  env.Iss,
 		"sub":  user.LoginID,
 		"iat":  time.Now().Unix(),
 		"exp":  time.Now().Add(time.Hour * 1).Unix(),
 		"role": user.Role,
 	}
 
-	return token.SignedString([]byte(secret))
+	return token.SignedString([]byte(env.Secret))
 }
 
 /*
@@ -44,9 +46,14 @@ func GenerateToken(user model.User) (string, error) {
 */
 func Parse(ctx *gin.Context) (string, int, error) {
 
+	env, err := config.LoadEnv()
+	if err != nil {
+		log.Fatalf("alert: %s", err)
+	}
+
 	token, err := request.ParseFromRequest(ctx.Request, request.OAuth2Extractor,
 		func(token *jwt.Token) (interface{}, error) {
-			b := []byte(secret)
+			b := []byte(env.Secret)
 			return b, nil
 		})
 	if err != nil {
