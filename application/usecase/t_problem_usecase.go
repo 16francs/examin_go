@@ -7,26 +7,33 @@ import (
 
 // TProblemUsecase - 講師用の 問題集ユースケース
 type TProblemUsecase interface {
-	CreateProblem(title, content string, userID uint) (*model.Problem, error)
+	CreateProblem(title, content, loginID string) (*model.Problem, error)
 }
 
 type tProblemUsecase struct {
-	service service.TProblemService
+	TProblemService service.TProblemService
+	UserService     service.UserService
 }
 
 // NewTProblemUsecase - tProblemUsecase の生成
-func NewTProblemUsecase(s service.TProblemService) TProblemUsecase {
-	return &tProblemUsecase{s}
+func NewTProblemUsecase(ps service.TProblemService, us service.UserService) TProblemUsecase {
+	return &tProblemUsecase{ps, us}
 }
 
-func (u *tProblemUsecase) CreateProblem(title, content string, userID uint) (*model.Problem, error) {
+func (u *tProblemUsecase) CreateProblem(title, content, loginID string) (*model.Problem, error) {
+	// ログイン情報の取得
+	teacher, err := u.UserService.Show(loginID)
+	if err != nil {
+		return nil, err
+	}
+
 	problem := &model.Problem{
 		Title:   title,
 		Content: content,
-		UserID:  userID,
+		UserID:  teacher.ID,
 	}
 
-	createdProblem, err := u.service.CreateProblem(problem)
+	createdProblem, err := u.TProblemService.CreateProblem(problem)
 	if err != nil {
 		return nil, err
 	}

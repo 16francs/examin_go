@@ -32,6 +32,8 @@ func Router() *gin.Engine {
 
 	// teachers routes
 	teachers := router.Group("/teachers")
+	teachers.Use(middleware.Auth())
+	teachers.Use(middleware.TeachersAuth())
 	{
 		teachers.POST("/problems", registry.TProblemHandler.CreateProblem)
 		teachers.POST("/teachers", registry.TTeacherHandler.CreateTeacher)
