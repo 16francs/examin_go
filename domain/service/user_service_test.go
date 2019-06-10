@@ -1,4 +1,4 @@
-package usecase
+package service
 
 import (
 	"reflect"
@@ -10,34 +10,38 @@ import (
 )
 
 var (
-	tTeacherHashPassword, _ = middleware.GenerateHash("LoginID")
+	userHashPassword, _ = middleware.GenerateHash("LoginID")
 
-	createdTeacherMock = &model.User{
+	createdUserMock = &model.User{
 		Base: model.Base{
 			ID:        1,
 			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
 		LoginID:  "LoginID",
-		Password: tTeacherHashPassword,
+		Password: userHashPassword,
 		Name:     "name",
 		School:   "school",
 		Role:     1,
 	}
 )
 
-type TTeacherServiceMock struct {
+type UserRepositoryMock struct {
 }
 
-func (m *TTeacherServiceMock) CreateTeacher(teacher *model.User) (*model.User, error) {
-	createdTeacher := createdTeacherMock
-	return createdTeacher, nil
+func (m *UserRepositoryMock) Create(user *model.User) error {
+	return nil
 }
 
-func TestTTeacherUsecase_CreateTeacher(t *testing.T) {
-	target := NewTTeacherUsecase(&TTeacherServiceMock{})
-	want := createdTeacherMock
-	got, err := target.CreateTeacher("LoginID", "name", "school")
+func (m *UserRepositoryMock) FindByLoginID(LoginID string) (model.User, error) {
+	createdUser := createdUserMock
+	return *createdUser, nil
+}
+
+func TestUserService_Show(t *testing.T) {
+	target := NewUserService(&UserRepositoryMock{})
+	want := createdUserMock
+	got, err := target.Show("loginID")
 
 	if err != nil {
 		t.Fatalf("error: %v", err)
