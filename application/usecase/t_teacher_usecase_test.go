@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	tTeacherHashPassword, _ = middleware.GenerateHash("LoginID")
+	hashPassword, _ = middleware.GenerateHash("LoginID")
 
 	createdTeacherMock = &model.User{
 		Base: model.Base{
@@ -19,7 +19,7 @@ var (
 			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
 		},
 		LoginID:  "LoginID",
-		Password: tTeacherHashPassword,
+		Password: hashPassword,
 		Name:     "name",
 		School:   "school",
 		Role:     1,

@@ -7,17 +7,14 @@ import (
 	"github.com/16francs/examin_go/interface/middleware"
 )
 
-// UserService - ユーザー サービス
 type UserService interface {
 	Create(user *model.User) error
-	Show(loginID string) (*model.User, error)
 }
 
 type userService struct {
 	repository.UserRepository
 }
 
-// NewUserService - userService の生成
 func NewUserService(u repository.UserRepository) UserService {
 	return &userService{u}
 }
@@ -29,13 +26,4 @@ func (u *userService) Create(user *model.User) error {
 	}
 	user.Password = hash
 	return u.UserRepository.Create(user)
-}
-
-func (u *userService) Show(loginID string) (*model.User, error) {
-	teacher, err := u.UserRepository.FindByLoginID(loginID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &teacher, nil
 }
