@@ -7,6 +7,7 @@ import (
 	"github.com/16francs/examin_go/interface/middleware"
 )
 
+// UserService - ユーザー サービス
 type UserService interface {
 	Create(user *model.User) error
 }
@@ -15,6 +16,7 @@ type userService struct {
 	repository.UserRepository
 }
 
+// NewUserService - userService の生成
 func NewUserService(u repository.UserRepository) UserService {
 	return &userService{u}
 }

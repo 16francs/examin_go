@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -14,7 +13,6 @@ import (
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		userId, loginID, role, err := Parse(c)
-		log.Printf("alert log: %v", err)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"status":      http.StatusText(http.StatusUnauthorized),

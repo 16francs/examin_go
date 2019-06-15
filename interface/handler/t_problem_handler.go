@@ -29,7 +29,13 @@ func (h *tProblemHandler) CreateProblem(c *gin.Context) {
 		return
 	}
 
-	response, err := h.usecase.CreateProblem(request.Title, request.Content, 1)
+	userID, ok := c.MustGet("UserID").(int)
+	if !ok {
+		Unauthorized(c)
+		return
+	}
+
+	response, err := h.usecase.CreateProblem(request.Title, request.Content, uint(userID))
 	if err != nil {
 		ServerError(c)
 		return

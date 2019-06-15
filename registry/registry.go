@@ -13,7 +13,7 @@ type Registry struct {
 	handler.HealthHandler
 	handler.SampleHandler
 	handler.UserHandler
-  handler.AuthHandler
+	handler.AuthHandler
 	handler.TProblemHandler
 	handler.TTeacherHandler
 }
