@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -8,11 +9,12 @@ import (
 
 /*
 	jwt-tokenを検証する
-	tokenからlogin_idとroleを取得する
+	tokenからuser_id，login_id，roleを取得する
 */
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		loginID, role, err := Parse(c)
+		userId, loginID, role, err := Parse(c)
+		log.Printf("alert log: %v", err)
 		if err != nil {
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"status":      http.StatusText(http.StatusUnauthorized),
@@ -22,6 +24,7 @@ func Auth() gin.HandlerFunc {
 			return
 		}
 
+		c.Set("UserID", userId)
 		c.Set("LoginID", loginID)
 		c.Set("Role", role)
 		c.Next()
