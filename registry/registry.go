@@ -13,7 +13,7 @@ type Registry struct {
 	handler.HealthHandler
 	handler.SampleHandler
 	handler.UserHandler
-	handler.AuthHandler
+  handler.AuthHandler
 	handler.TProblemHandler
 	handler.TTeacherHandler
 }
@@ -37,7 +37,7 @@ func NewRegistry() Registry {
 
 	tProblemRepository := datastore.NewTProblemRepository()
 	tProblemService := service.NewTProblemService(tProblemRepository)
-	tProblemUsecase := usecase.NewTProblemUsecase(tProblemService, userService)
+	tProblemUsecase := usecase.NewTProblemUsecase(tProblemService)
 	tProblemHandler := handler.NewTProblemHandler(tProblemUsecase)
 
 	tTeacherRepository := datastore.NewTTeacherRepository()
