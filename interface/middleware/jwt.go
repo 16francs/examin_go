@@ -15,12 +15,13 @@ import (
 /*
 jwt tokenを生成する
 	iss tokenの発行者
-	sub tokenの利用者を一意に特定する識別子
+	sub tokenの利用者を一意に特定する識別子 => user_id
 	iat tokenの発行時間
 	exp tokenの有効時間
+	login_id: userのログインID
 	role userの役割
 */
-func GenerateToken(user model.User) (string, error) {
+func GenerateToken(user *model.User) (string, error) {
 
 	env, err := config.LoadEnv()
 	if err != nil {
@@ -30,11 +31,12 @@ func GenerateToken(user model.User) (string, error) {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
 	token.Claims = jwt.MapClaims{
-		"iss":  env.Iss,
-		"sub":  user.LoginID,
-		"iat":  time.Now().Unix(),
-		"exp":  time.Now().Add(time.Hour * 1).Unix(),
-		"role": user.Role,
+		"iss":      env.Iss,
+		"sub":      user.Base.ID,
+		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(time.Hour * 1).Unix(),
+		"login_id": user.LoginID,
+		"role":     user.Role,
 	}
 
 	return token.SignedString([]byte(env.Secret))
@@ -44,7 +46,7 @@ func GenerateToken(user model.User) (string, error) {
 	jwt tokenから情報を取り出す
 	ここではlogin_idとroleを返却する
 */
-func Parse(ctx *gin.Context) (string, int, error) {
+func Parse(ctx *gin.Context) (int, string, int, error) {
 
 	env, err := config.LoadEnv()
 	if err != nil {
@@ -57,10 +59,10 @@ func Parse(ctx *gin.Context) (string, int, error) {
 			return b, nil
 		})
 	if err != nil {
-		return "", -1, err
+		return -1, "", -1, err
 	}
 
 	claims := token.Claims.(jwt.MapClaims)
 
-	return claims["sub"].(string), int(claims["role"].(float64)), nil
+	return int(claims["sub"].(float64)), claims["login_id"].(string), int(claims["role"].(float64)), nil
 }
