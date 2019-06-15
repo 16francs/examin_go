@@ -10,7 +10,6 @@ import (
 // UserService - ユーザー サービス
 type UserService interface {
 	Create(user *model.User) error
-	Show(loginID string) (*model.User, error)
 }
 
 type userService struct {
@@ -29,13 +28,4 @@ func (u *userService) Create(user *model.User) error {
 	}
 	user.Password = hash
 	return u.UserRepository.Create(user)
-}
-
-func (u *userService) Show(loginID string) (*model.User, error) {
-	teacher, err := u.UserRepository.FindByLoginID(loginID)
-	if err != nil {
-		return nil, err
-	}
-
-	return &teacher, nil
 }

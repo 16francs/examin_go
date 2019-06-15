@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/16francs/examin_go/domain/model"
-	"github.com/16francs/examin_go/interface/middleware"
 )
 
 var (
@@ -30,35 +29,10 @@ func (m *TProblemServiceMock) CreateProblem(problem *model.Problem) (*model.Prob
 	return createdProblem, nil
 }
 
-type UserServiceMock struct {
-}
-
-func (m *UserServiceMock) Create(user *model.User) error {
-	return nil
-}
-
-func (m *UserServiceMock) Show(loginID string) (*model.User, error) {
-	hashPassword, _ := middleware.GenerateHash("LoginID")
-
-	createdTeacher := &model.User{
-		Base: model.Base{
-			ID:        1,
-			CreatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
-			UpdatedAt: time.Date(2019, time.January, 1, 0, 0, 0, 0, time.UTC),
-		},
-		LoginID:  "loginID",
-		Password: hashPassword,
-		Name:     "name",
-		School:   "school",
-		Role:     1,
-	}
-	return createdTeacher, nil
-}
-
 func TestTProblemUsecase_CreateProblem(t *testing.T) {
-	target := NewTProblemUsecase(&TProblemServiceMock{}, &UserServiceMock{})
+	target := NewTProblemUsecase(&TProblemServiceMock{})
 	want := createdProblemMock
-	got, err := target.CreateProblem("title", "content", "loginID")
+	got, err := target.CreateProblem("title", "content", 1)
 
 	if err != nil {
 		t.Fatalf("error: %v", err)
