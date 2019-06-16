@@ -32,7 +32,7 @@ func (m *TProblemServiceMock) CreateProblem(problem *model.Problem) (*model.Prob
 func TestTProblemUsecase_CreateProblem(t *testing.T) {
 	target := NewTProblemUsecase(&TProblemServiceMock{})
 	want := createdProblemMock
-	got, err := target.CreateProblem("title", "content", 1)
+	got, err := target.CreateProblem("title", "content", 1, ["aaa", "bbb", "ccc"])
 
 	if err != nil {
 		t.Fatalf("error: %v", err)

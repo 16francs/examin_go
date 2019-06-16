@@ -35,7 +35,7 @@ func (h *tProblemHandler) CreateProblem(c *gin.Context) {
 		return
 	}
 
-	response, err := h.usecase.CreateProblem(request.Title, request.Content, uint(userID))
+	response, err := h.usecase.CreateProblem(request.Title, request.Content, uint(userID), request.Tags)
 	if err != nil {
 		ServerError(c)
 		return

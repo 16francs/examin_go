@@ -7,7 +7,7 @@ import (
 
 // TProblemUsecase - 講師用の 問題集ユースケース
 type TProblemUsecase interface {
-	CreateProblem(title, content string, userID uint) (*model.Problem, error)
+	CreateProblem(title, content string, userID uint, tags []string) (*model.Problem, error)
 }
 
 type tProblemUsecase struct {
@@ -19,7 +19,7 @@ func NewTProblemUsecase(s service.TProblemService) TProblemUsecase {
 	return &tProblemUsecase{s}
 }
 
-func (u *tProblemUsecase) CreateProblem(title, content string, userID uint) (*model.Problem, error) {
+func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags []string) (*model.Problem, error) {
 	problem := &model.Problem{
 		Title:   title,
 		Content: content,
