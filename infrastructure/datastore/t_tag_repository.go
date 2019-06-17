@@ -13,7 +13,7 @@ func NewTTagRepository() repository.TTagRepository {
 	return &tTagRepository{}
 }
 
-func (r *tTagRepository) CreateTag(tag *model.Tag) (*modek.Tag, error) {
+func (r *tTagRepository) CreateTag(tag *model.Tag) (*model.Tag, error) {
 	db := Connect()
 	defer db.Close()
 

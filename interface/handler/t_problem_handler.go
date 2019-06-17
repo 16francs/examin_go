@@ -5,6 +5,7 @@ import (
 
 	"github.com/16francs/examin_go/application/usecase"
 	"github.com/16francs/examin_go/interface/request"
+	"github.com/16francs/examin_go/interface/response"
 	"github.com/gin-gonic/gin"
 )
 
@@ -35,11 +36,26 @@ func (h *tProblemHandler) CreateProblem(c *gin.Context) {
 		return
 	}
 
-	response, err := h.usecase.CreateProblem(request.Title, request.Content, uint(userID), request.Tags)
+	problem, tags, err := h.usecase.CreateProblem(request.Title, request.Content, uint(userID), request.Tags)
 	if err != nil {
 		ServerError(c)
 		return
 	}
 
+	// レスポンスの整形
+	tagContents := make([]string, 0, 4)
+	for _, v := range tags {
+		tagContents = append(tagContents, v.Content)
+	}
+
+	response := &response.TCreateProblem{
+		ID:          problem.Base.ID,
+		Title:       problem.Title,
+		Content:     problem.Content,
+		Tags:        tagContents,
+		TeacherName: "taecher", // TODO: ログイン情報から取得
+		CreatedAt:   problem.Base.CreatedAt,
+		UpdatedAt:   problem.Base.UpdatedAt,
+	}
 	c.JSON(http.StatusCreated, response)
 }
