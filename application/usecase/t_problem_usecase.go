@@ -51,7 +51,7 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 			TagID:     createdTag.Base.ID,
 		}
 
-		_, err := u.tProblemsTagService.CreateProblemsTag(problemsTag)
+		_, err = u.tProblemsTagService.CreateProblemsTag(problemsTag)
 		if err != nil {
 			return nil, nil, err
 		}
