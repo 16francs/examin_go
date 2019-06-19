@@ -37,6 +37,7 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 	// 問題集のタグを登録
 	createdTags := make([]*model.Tag, 0, 4)
 	for _, v := range tags {
+		// タグの登録と取得
 		tag := &model.Tag{Content: v}
 
 		createdTag, err := u.tTagService.CreateTag(tag)
@@ -44,20 +45,18 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 			return nil, nil, err
 		}
 
-		createdTags = append(createdTags, createdTag)
-	}
-
-	// 問題集とタグを関連付け
-	for _, v := range createdTags {
+		// 問題集とタグを関連付け
 		problemsTag := &model.ProblemsTag{
 			ProblemID: createdProblem.Base.ID,
-			TagID:     v.Base.ID,
+			TagID:     createdTag.Base.ID,
 		}
 
 		_, err := u.tProblemsTagService.CreateProblemsTag(problemsTag)
 		if err != nil {
 			return nil, nil, err
 		}
+
+		createdTags = append(createdTags, createdTag)
 	}
 
 	return createdProblem, createdTags, nil
