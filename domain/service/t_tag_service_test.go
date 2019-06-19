@@ -34,7 +34,7 @@ func (m *TTagRepositoryMock) CreateTag(tag *model.Tag) (*model.Tag, error) {
 func TestTagService_CreateTag(t *testing.T) {
 	target := NewTTagService(&TTagRepositoryMock{})
 	want := createdTagMock
-	got, err := target.CreateTag(TagMock)
+	got, err := target.CreateTag(tagMock)
 
 	if err != nil {
 		t.Fatalf("error: %v", err)
