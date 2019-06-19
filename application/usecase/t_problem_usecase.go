@@ -11,13 +11,14 @@ type TProblemUsecase interface {
 }
 
 type tProblemUsecase struct {
-	tProblemService service.TProblemService
-	tTagService     service.TTagService
+	tProblemService     service.TProblemService
+	tProblemsTagService service.TProblemsTagService
+	tTagService         service.TTagService
 }
 
 // NewTProblemUsecase - tProblemUsecase の生成
-func NewTProblemUsecase(ps service.TProblemService, ts service.TTagService) TProblemUsecase {
-	return &tProblemUsecase{ps, ts}
+func NewTProblemUsecase(ps service.TProblemService, pts service.TProblemsTagService, ts service.TTagService) TProblemUsecase {
+	return &tProblemUsecase{ps, pts, ts}
 }
 
 func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags []string) (*model.Problem, []*model.Tag, error) {
@@ -34,10 +35,13 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 	}
 
 	// 問題集のタグを登録
+	// TODO: 全てのタグを取得
 	createdTags := make([]*model.Tag, 0, 4)
 	for _, v := range tags {
 		tag := &model.Tag{Content: v}
 
+		// TODO: タグがすでに存在する場合、タグ情報の取得
+		// TODO: そうでない場合は、タグを登録する
 		createdTag, err := u.tTagService.CreateTag(tag)
 		if err != nil {
 			return nil, nil, err
@@ -46,7 +50,18 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 		createdTags = append(createdTags, createdTag)
 	}
 
-	// TODO: 問題集とタグを関連付け
+	// 問題集とタグを関連付け
+	for _, v := range createdTags {
+		problemsTag := &model.ProblemsTag{
+			ProblemID: createdProblem.Base.ID,
+			TagID:     v.Base.ID,
+		}
+
+		_, err := u.tProblemsTagService.CreateProblemsTag(problemsTag)
+		if err != nil {
+			return nil, nil, err
+		}
+	}
 
 	return createdProblem, createdTags, nil
 }
