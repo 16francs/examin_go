@@ -17,6 +17,6 @@ func (r *tTagRepository) CreateTag(tag *model.Tag) (*model.Tag, error) {
 	db := Connect()
 	defer db.Close()
 
-	err := db.Create(&tag).Error
+	err := db.FirstOrCreate(&tag, tag).Error
 	return tag, err
 }

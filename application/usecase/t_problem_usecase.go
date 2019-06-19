@@ -35,13 +35,10 @@ func (u *tProblemUsecase) CreateProblem(title, content string, userID uint, tags
 	}
 
 	// 問題集のタグを登録
-	// TODO: 全てのタグを取得
 	createdTags := make([]*model.Tag, 0, 4)
 	for _, v := range tags {
 		tag := &model.Tag{Content: v}
 
-		// TODO: タグがすでに存在する場合、タグ情報の取得
-		// TODO: そうでない場合は、タグを登録する
 		createdTag, err := u.tTagService.CreateTag(tag)
 		if err != nil {
 			return nil, nil, err
