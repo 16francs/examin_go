@@ -3,6 +3,8 @@ package handler
 import (
 	"net/http"
 
+	"github.com/16francs/examin_go/interface/middleware"
+
 	"github.com/16francs/examin_go/application/usecase"
 	"github.com/16francs/examin_go/interface/request"
 	"github.com/16francs/examin_go/interface/response"
@@ -42,18 +44,26 @@ func (h *tProblemHandler) CreateProblem(c *gin.Context) {
 		return
 	}
 
-	// レスポンスの整形
+	// ログイン講師情報の取得
+	authUser, err := middleware.GetAuthUser(uint(userID))
+	if err != nil {
+		ServerError(c)
+		return
+	}
+
+	// 問題集タグの整形
 	tagContents := make([]string, 0, 4)
 	for _, v := range tags {
 		tagContents = append(tagContents, v.Content)
 	}
 
+	// レスポンスの作成
 	response := &response.TCreateProblem{
 		ID:          problem.Base.ID,
 		Title:       problem.Title,
 		Content:     problem.Content,
 		Tags:        tagContents,
-		TeacherName: "taecher", // TODO: ログイン情報から取得
+		TeacherName: authUser.Name,
 		CreatedAt:   problem.Base.CreatedAt,
 		UpdatedAt:   problem.Base.UpdatedAt,
 	}
