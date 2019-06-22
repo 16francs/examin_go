@@ -13,5 +13,7 @@ func main() {
 	// テーブルの作成
 	// db.AutoMifrate(&model.User{}) <- User テーブルの作成
 	db.AutoMigrate(&model.Problem{})
+	db.AutoMigrate(&model.Tag{})
+	db.AutoMigrate(&model.ProblemsTag{})
 	db.AutoMigrate(&model.User{})
 }

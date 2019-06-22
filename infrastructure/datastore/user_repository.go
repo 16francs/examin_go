@@ -21,6 +21,15 @@ func (u *userRepository) Create(user *model.User) error {
 	return err
 }
 
+func (u *userRepository) FindByID(id uint) (*model.User, error) {
+	db := Connect()
+	defer db.Close()
+
+	user := &model.User{}
+	err := db.Where("id = ?", id).First(&user).Error
+	return user, err
+}
+
 func (u *userRepository) FindByLoginID(loginID string) (*model.User, error) {
 	db := Connect()
 	defer db.Close()

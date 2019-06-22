@@ -35,9 +35,15 @@ func NewRegistry() Registry {
 	authUsecase := usecase.NewAuthUsecase(authService)
 	authHandler := handler.NewAuthHandler(authUsecase)
 
+	tTagRepository := datastore.NewTTagRepository()
+	tTagService := service.NewTTagService(tTagRepository)
+
+	tProblemsTagRepository := datastore.NewTProblemsTagRepository()
+	tProblemsTagService := service.NewTProblemsTagService(tProblemsTagRepository)
+
 	tProblemRepository := datastore.NewTProblemRepository()
 	tProblemService := service.NewTProblemService(tProblemRepository)
-	tProblemUsecase := usecase.NewTProblemUsecase(tProblemService)
+	tProblemUsecase := usecase.NewTProblemUsecase(tProblemService, tProblemsTagService, tTagService)
 	tProblemHandler := handler.NewTProblemHandler(tProblemUsecase)
 
 	tTeacherRepository := datastore.NewTTeacherRepository()

@@ -3,8 +3,22 @@ package middleware
 import (
 	"net/http"
 
+	"github.com/16francs/examin_go/domain/model"
+	"github.com/16francs/examin_go/infrastructure/datastore"
+
 	"github.com/gin-gonic/gin"
 )
+
+// GetAuthUser - IDからログインユーザー情報を取得
+func GetAuthUser(userID uint) (*model.User, error) {
+	userRepository := datastore.NewUserRepository()
+	user, err := userRepository.FindByID(userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
 
 /*
 	jwt-tokenを検証する
