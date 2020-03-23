@@ -3,7 +3,7 @@ module github.com/16francs/examin_go
 require (
 	github.com/comail/colog v0.0.0-20160416085026-fba8e7b1f46c
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/gin-gonic/gin v1.4.0
+	github.com/gin-gonic/gin v1.6.1
 	github.com/jinzhu/gorm v1.9.8
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/kr/pretty v0.1.0 // indirect
